@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>KRCTool</title>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+  <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+  <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+  <style>
+    /* Remove the navbar's default margin-bottom and rounded borders */ 
+    .navbar {
+      margin-bottom: 0;
+      border-radius: 0;
+    }
+    
+    /* Set height of the grid so .sidenav can be 100% (adjust as needed) */
+    .row.content {height: 450px}
+    
+    /* Set gray background color and 100% height */
+    .sidenav {
+      padding-top: 20px;
+      background-color: #f1f1f1;
+      height: 100%;
+    }
+    
+    /* Set black background color, white text and some padding */
+    footer {
+      background-color: #555;
+      color: white;
+      padding: 15px;
+    }
+    
+    /* On small screens, set height to 'auto' for sidenav and grid */
+    @media screen and (max-width: 767px) {
+      .sidenav {
+        height: auto;
+        padding: 15px;
+      }
+      .row.content {height:auto;} 
+    }
+  </style>
+</head>
+<body>
+<!--
+<nav class="navbar navbar-inverse">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>                        
+      </button>
+      <a class="navbar-brand" href="cristal.jpg">Logo</a>
+    </div>
+    <div class="collapse navbar-collapse" id="myNavbar">
+      <ul class="nav navbar-nav">
+        <li class="active"><a href="#">Home</a></li>
+        <li><a href="#">About KRCTool</a></li>
+        <li><a href="#">CRISTAL</a></li>
+        <li><a href="#">Contact</a></li>
+        <li><a href="#">CorpusInfo</a></li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+       <li><a href="#">English</a></li>
+       <li><a href="#">Français</a></li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li><a href="#"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>-->
+  
+<div class="container-fluid text-center">    
+  <div class="row content">
+    <div class="col-sm-2 sidenav">
+
+
+
+      {% if envoi %}
+
+
+     {% load filtres %}
+            <div class="panel panel-default text-left ">
+              <div class="panel-heading"><span class="badge"> <b>{{liste_coll|length}}</b></span> Collocation{{ liste_coll|length|pluralize }} pour <b style="color:RoyalBlue    ;"> {{krcrequest.termSource}}</b> et <b style="color:RoyalBlue    ;">{{krcrequest.termTarget}}</b> :
+              </div>
+            </div>
+      {% endif %}
+
+
+
+    </div>
+    <div class="col-sm-8 text-middle">
+      <h2>KRCTool</h2>
+      <p><kbd>Knowledge-Rich Contexts Tool</kbd></p>
+  <!--<p><kbd>Translation | Terminology | Lexicography</kbd></p> -->
+      <div id="translator_970"><noscript>Javascript is disable - <a href="http://www.supportduweb.com/">http://www.supportduweb.com/</a> - <a href="http://www.supportduweb.com/generateur-boutons-traduction-translation-google-gratuit-html-code=script-boutons-traduire-page-web.html">Générateur de boutons de traduction</a></noscript></div><script type="text/javascript" src="http://services.supportduweb.com/translator/970-1-ynnynnnnn.js"></script>
+
+      
+<!--<a href="  l'adresse de ton lien ici  " target="_blank"><img src="http://vignette2.wikia.nocookie.net/poths-pirates-of-the-high-seas/images/a/a8/British_Flag_Wallpapers_%281%29.png/revision/latest?cb=20131117031203" title=" traduction anglais" border="0" height="16" width="16"></a>
+
+<a href="  ton lien ici  " target="_blank"><img src="http://vignette3.wikia.nocookie.net/scrubs/images/c/c7/Flag-France.jpg/revision/latest?cb=20090820235843"  title=" traduction français"  border="0" height="16" width="16"></a>  -->
+
+<form action="{% url "KRCTool.views.home" %}" method="post">{% csrf_token %}
+      {{form.translSens}}
+
+   
+
+      <br><br>
+      
+        <div class="col-sm-6 well"> Saisir un terme :<br>{{form.termSource}}</div>
+        <div class="col-sm-6 well"> Saisir une traduction :<br>{{form.termTarget}}</div>
+        {{form.corpus}}
+        <br><br>
+<button type="submit" class="save btn btn-default"><span class="glyphicon glyphicon-search"></span> Search</button>
+</form>
+<br>
+
+{% if envoi %}
+
+            <div method="post" class="btn-group ">
+
+                  <button type="button" class="btn btn-success">Yes</button>
+                  <button type="button" class="btn btn-danger">NO</button>
+                </div>
+
+          {% load filtres %}
+            <div class="panel panel-default text-left ">
+              <div class="panel-heading"><span class="badge"> <b>{{liste_coll|length}}</b></span> Collocation{{ liste_coll|length|pluralize }} pour <b style="color:RoyalBlue    ;"> {{krcrequest.termSource}}</b> et <b style="color:RoyalBlue    ;">{{krcrequest.termTarget}}</b> :
+              </div>
+              <div class="panel-body">      
+                      
+
+
+            
+            <ul class="nav nav-tabs">
+              
+              {% if liste_collADJ %}<li><a data-toggle="tab" href="#menu1">ADJ-ADJ</a></li>{% endif %}
+              {% if liste_collNOM %}<li><a data-toggle="tab" href="#menu2">NOM-NOM</a></li>{% endif %}
+              {% if liste_collVER %}<li><a data-toggle="tab" href="#menu3">VER-VER</a></li>{% endif %}
+              {% if liste_collAUT %}<li><a data-toggle="tab" href="#menu4">AUTRES</a></li>{% endif %}
+            </ul>
+
+            <div class="tab-content">
+
+              <div id="menu1" class="tab-pane fade">
+                <br>
+               {% for crcADJ in liste_collADJ %}
+
+                        <a href="#{{ crcADJ|posId:liste_coll }}" method="post" class="btn btn-primary" data-toggle="collapse" >
+                          {{crcADJ.0}}, {{crcADJ.1}} : <span class="badge">{{ krcrequest |crc_correspondant:crcADJ |length }}</span></a>
+                {% endfor %}
+               
+              </div>
+              <div id="menu2" class="tab-pane fade">
+                <br>
+                {% for crcNOM in liste_collNOM %}
+
+                        <a href="#{{ crcNOM|posId:liste_coll }}" method="post" class="btn btn-primary" data-toggle="collapse" >
+                          {{crcNOM.0}}, {{crcNOM.1}} : <span class="badge">{{ krcrequest |crc_correspondant:crcNOM |length }}</span></a>
+                {% endfor %}
+              </div>
+              <div id="menu3" class="tab-pane fade">
+                <br>
+               {% for crcVER in liste_collVER %}
+
+                        <a href="#{{ crcVER|posId:liste_coll }}" method="post" class="btn btn-primary" data-toggle="collapse" >
+                          {{crcVER.0}}, {{crcVER.1}} : <span class="badge">{{ krcrequest |crc_correspondant:crcVER |length }}</span></a>
+                {% endfor %}
+              </div>
+               <div id="menu4" class="tab-pane fade">
+               {% for crcAUT in liste_collAUT %}
+
+                        <a href="#{{ crcAUT|posId:liste_coll }}" method="post" class="btn btn-primary" data-toggle="collapse" >
+                          {{crcAUT.0}}, {{crcAUT.1}} : <span class="badge">{{ krcrequest |crc_correspondant:crcAUT |length }}</span></a>
+                {% endfor %}
+              </div>
+            </div>
+
+
+
+
+
+
+                       {% for crc in liste_coll %}
+
+
+                          {% with krcrequest|crc_correspondant:crc as x %}           
+
+                          
+                          <div id="{{ crc|posId:liste_coll }}" class="collapse">
+
+                            {% for crcSentence in x %}
+
+                              <table class="table text-left">
+                               <thead>
+                               <tr>
+                                  <th>KRC (EN)</th>
+                                   <th>KRC (FR)</th>
+                                   </tr>
+                                   </thead>
+                                  <tbody>
+                                    <tr>
+                                       <td  class="col-sm-6" align="justify">{{crcSentence.sentenceSource|colorTerm:crcSentence }}</td>
+                                       <td  class="col-sm-6" align="justify">{{crcSentence.sentenceTarget|colorTerm:crcSentence}}</td>
+                                     </tr>
+                                  </tbody>
+                              </table>
+                            {% endfor %}
+                            </div>
+                            
+                          {% endwith %}
+
+
+
+
+
+
+
+
+                       {% empty %}
+                        pas de collocations
+
+                        {% endfor %}
+
+                      </div>
+
+            </div>
+
+{% endif %}
+
+
+    {% if not Krcrequest %}
+  <div id="demo" class="collapse">
+    {% for crcSentence in Krcrequest %}
+
+
+    <table class="table text-left">
+      <thead>
+        <tr>
+          <th>Source</th>
+          <th>Cible</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr>
+          <td  class="col-sm-6" align="justify">{{crcSentence.sentenceSource}}</td>
+          <td  class="col-sm-6" align="justify">{{crcSentence.sentenceTarget}}</td>
+       </tr>
+      </tbody>
+    </table>
+
+  {% endfor %}
+
+  </div>
+
+
+
+
+    {% endif %}
+
+
+
+
+
+{% if KRCsentences %}
+  <br> <h1>Salut</h1>
+
+{% endif %}
+
+
+  
+    </div>
+
+  <div class="col-sm-2 sidenav" >
+    <h4>Autres traductions </h4>
+    <hr>
+    <div class = "text-left">
+
+      {% for  candidate in liste_candidates %}
+        <p><button type="button" class="btn btn-success">{{candidate.transCandidate}}</button></p>
+        
+
+
+
+      {% endfor %}
+     
+    </div>
+  </div>
+  </div>
+</div>
+
+<footer class="container-fluid text-center">
+  <p>Footer Text</p>
+</footer>
+
+</body>
+</html>

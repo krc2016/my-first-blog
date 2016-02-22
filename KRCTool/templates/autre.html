@@ -1,0 +1,166 @@
+{% extends "base.html" %}
+
+{% block collocations %}
+	{% load filtres %}
+    <div class="panel panel-default text-left ">
+    <div class="panel-heading"><span class="badge"> <b>{{liste_coll|length}}</b></span> Collocation{{ liste_coll|length|pluralize }} pour <b style="color:RoyalBlue    ;"> {{queryCouple.termSource}}</b> et <b style="color:RoyalBlue    ;">{{queryCouple.termTarget}}</b> :
+    </div>
+ 
+    </div>
+
+
+  <div class="panel-group" id="#">
+
+  {% if liste_collADJ %}
+	  <div class="panel panel-default">
+	    <div class="panel-heading">
+	      <h4 class="panel-title">
+	        <a data-toggle="collapse" data-parent="#accordion" href="#collapse1">
+	        ADJ-ADJ</a>
+	      </h4>
+	    </div>
+	    <div id="collapse1" class="panel-collapse collapse in">
+	      <div class="panel-body">
+	      	{% for crcADJ in liste_collADJ %}
+
+	        	<a href="#{{ crcADJ|posId:liste_coll }}" method="post" class="btn btn-link btn-md" data-toggle="collapse" >
+	            {{crcADJ.0}}, {{crcADJ.1}} : <span class="badge">{{ queryCouple |crc_correspondant:crcADJ |length }}</span></a>
+	        {% endfor %}
+
+	      </div>
+	    </div>
+	  </div>
+  {% endif %}
+  {% if liste_collNOM %}
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h4 class="panel-title">
+        <a data-toggle="collapse" data-parent="#accordion" href="#collapse2">
+        NOM-NOM</a>
+      </h4>
+    </div>
+    <div id="collapse2" class="panel-collapse collapse in">
+      <div class="panel-body">
+      	{% for crcNOM in liste_collNOM %}
+
+                        <a href="#{{ crcNOM|posId:liste_coll }}" method="post" class="btn btn-link btn-md" data-toggle="collapse" >
+                          {{crcNOM.0}}, {{crcNOM.1}} : <span class="badge">{{ queryCouple |crc_correspondant:crcNOM |length }}</span></a>
+                {% endfor %}
+      </div>
+    </div>
+  </div>
+  {% endif %}
+  {% if liste_collVER %}
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h4 class="panel-title">
+        <a data-toggle="collapse" data-parent="#accordion" href="#collapse3">
+        VER-VER</a>
+      </h4>
+    </div>
+    <div id="collapse3" class="panel-collapse collapse in">
+      <div class="panel-body">
+      	{% for crcVER in liste_collVER %}
+
+                        <a href="#{{ crcVER|posId:liste_coll }}" method="post" class="btn btn-link btn-md" data-toggle="collapse" >
+                          {{crcVER.0}}, {{crcVER.1}} : <span class="badge">{{ queryCouple |crc_correspondant:crcVER |length }}</span></a>
+                {% endfor %}
+
+      </div>
+    </div>
+  </div>
+  {% endif %}
+  {% if liste_collAUT %}
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h4 class="panel-title">
+        <a data-toggle="collapse" data-parent="#accordion" href="#collapse3">
+        Autres</a>
+      </h4>
+    </div>
+    <div id="collapse3" class="panel-collapse collapse">
+      <div class="panel-body">
+		{% for crcAUT in liste_collAUT %}
+
+                        <a href="#{{ crcAUT|posId:liste_coll }}" method="post" class="btn btn-link btn-md" data-toggle="collapse" >
+                          {{crcAUT.0}}, {{crcAUT.1}} : <span class="badge">{{ queryCouple |crc_correspondant:crcAUT |length }}</span></a>
+                {% endfor %}
+
+      </div>
+    </div>
+  </div>
+  {% endif %}
+
+
+</div> 
+
+
+
+
+{% endblock %}
+
+{% block sentences %}
+
+	            {% for crc in liste_coll %}
+
+
+	              {% with queryCouple|crc_correspondant:crc as x %}           
+
+	              
+		            <div id="{{ crc|posId:liste_coll }}" class="collapse in">
+
+		                {% for crcSentence in x %}
+
+		                	<table class="table text-left">
+			                   <thead>
+			                   		<tr>
+				                    	<th>(EN)</th>
+				                    	<th>(FR)</th>
+			                    	</tr>
+			                    </thead>
+			                    	<tbody>
+				                        <tr>
+				                           <td  class="col-sm-6" align="justify">{{crcSentence.sentenceSource|colorTerm:crcSentence }}</td>
+				                           <td  class="col-sm-6" align="justify">{{crcSentence.sentenceTarget|colorTerm:crcSentence}}</td>
+				                        </tr>
+			                      </tbody>
+		                  	</table>
+		                {% endfor %}
+		            </div>
+	                
+	              {% endwith %}
+
+
+
+          {% empty %}
+            Pas de collocations
+	        {% endfor %}
+{% endblock %}
+
+{% block candidates %}
+  <div class="panel panel-default text-left ">
+  <div class="panel-heading">Autres traductions pour <b style="color:RoyalBlue    ;"> {{queryCouple.termSource}}</b> </div>
+
+    {% for  candidate in liste_candidates %}
+
+     <p><a href="{% url "KRCTool.views.affiche_collocationsCandidates" queryCouple.id candidate.id %}" type="button" class="btn btn-link btn-md">{{candidate.transCandidate}}</a></p>
+     
+      {% empty %}
+            Pas de traductions
+
+    {% endfor %}
+
+  </div>
+
+    {% block footer %}
+     <nav class="navbar navbar-inverse navbar-fixed-bottom">
+          <div class="container-fluid">
+              <form action="{% url "KRCTool.views.newHome" %}" method="post" class="text-center">{% csrf_token %}
+              <button type="submit" class="save btn btn-success  btn-lg text-">   valid</button>
+              <button type="submit" class="save btn btn-lg   btn-danger"> invalid</button>
+    </form>
+        </div>
+    </nav>
+    {% endblock %}
+ 
+{% endblock %}
