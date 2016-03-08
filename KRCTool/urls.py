@@ -2,7 +2,7 @@ from django.conf.urls import patterns, url
 
 from . import views
 
-
+'''
 urlpatterns = patterns('KRCTool.views',
 	#url(r'^accueil/$', 'home',name='krc-list'),
 	url(r'^accueil/$', 'newHome', name='news-archive'),
@@ -21,4 +21,11 @@ urlpatterns = patterns('KRCTool.views',
 
 
 )
-		
+
+'''
+urlpatterns = [
+    url(r'^$', views.newHome, name='news-archive'),
+    url(r'^accueil/(?P<id_couple>\d+)/$', views.affiche_collocations),
+    url(r'^accueil/(?P<id_couple>\d+)/(?P<id_candidate>\d+)/$', views.affiche_collocationsCandidates),
+    url(r'^article/(\d+)/$', views.association_champ),
+]

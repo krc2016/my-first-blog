@@ -1,0 +1,15 @@
+basalte	NN	basalte
+cendre	NN	cendre
+cratère	NN	cratère
+cône	NN	cône
+débris	NN	débris
+dôme	NN	dôme
+fontaine	NN	fontaine
+gaz	NN	gaz
+lave	NN	lave
+magma	NN	magma
+scorie	NN	scorie
+téphra	NN	téphra
+volcan	NN	volcan
+vésicule	NN	vésicule
+éruption	NN	éruption

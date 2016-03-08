@@ -1,0 +1,66 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+##########################################################
+### Autor name : 		Firas HMIDA		##
+### Date de création :		07-07-2014		##
+### Date de modification : 	23-09-2014		##
+### Contenu : 			CRC-Collocations	##
+##########################################################
+
+import re
+import os
+import sys
+import xlrd
+import time
+import nltk
+import xlwt
+import pickle
+import itertools
+import subprocess
+from math import *
+from nltk.collocations import *
+from operator import itemgetter
+from nltk.corpus import stopwords
+from nltk.probability import FreqDist
+from nltk.metrics import BigramAssocMeasures
+from nltk.tokenize.regexp import RegexpTokenizer
+from nltk import word_tokenize, wordpunct_tokenize
+from nltk.collocations import BigramCollocationFinder
+
+
+linesFR = list(set(open('../corpus/vulcanoPOS.txt').read().strip().split('.	SENT	.')))
+linesEN = list(set(open('../corpus/vulcanoEN-POS.txt').read().strip().split('.	SENT	.')))
+
+stop_wordsFR = open('../stopW/StopWords.txt').read().strip().split('\n')
+stop_wordsEN = open('../stopW/StopWordsEN.txt').read().strip().split('\n')
+
+
+from operator import itemgetter
+
+out = open('OutFR.txt').read().strip().split('\n')
+
+nbr = [float(line.split('\t')[0])/len(line.split('\t')[1].split()) for line in out if not re.match('-Infinity',line)]
+print sum(nbr),len(nbr)
+print sum(nbr)/len(nbr)
+
+def sentence_length(sentence, SW) :
+	return len([w for w in sentence.split() if w not in SW])
+
+#out = open('candidatesFR.txt').read().strip().split('\n')
+#nbr = [sentence_length(sen,stop_wordsFR) for sen in out]# if sentence_length(sen,stop_wordsFR)<10]
+#print sum(nbr)/float(len(nbr))
+#for i in nbr: print i,'\n','__________'
+'''
+for sentence in linesEN :
+	sentence = sentence.lower()
+	
+        lemmSentence =' '.join([line.split('\t')[2] for line in [l.strip() 
+                                            for l in sentence.strip().split('\n')
+                                            if len(sentence.strip()) != 0]])
+        notLemmSentence =' '.join([line.split('\t')[0] for line in [l.strip() 
+                                        for l in sentence.strip().split('\n') 
+                                       if len(sentence.strip()) != 0]])
+	
+	out.write(notLemmSentence+'\n')
+out.close()
+'''

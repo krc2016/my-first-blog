@@ -1,0 +1,15 @@
+basalt	NN	basalt
+cinder	NN	cinder
+crater	NN	crater
+cone	NN	cone
+debris	NN	debris
+dome	NN	dome
+fountain	NN	fountain
+gas	NN	gas
+lava	NN	lava
+magma	NN	magma
+scoria	NN	scoria
+tephra	NN	tephra
+volcan	NN	volcan
+vesicle	NN	vesicle
+eruption	NN	eruption

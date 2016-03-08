@@ -1,0 +1,81 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+##########################################################################
+### Autor name : 		Firas HMIDA				##
+### Adresse :			firas.hmida@univ-nantes.fr		##
+### Date de création :		21-07-2014				##
+### Date de modification : 	22-07-2014		          	##
+### Contenu : 			Baseline : linguistic-collocations	##
+##########################################################################
+import re
+import os
+import sys
+import time
+import nltk
+import pickle
+import itertools
+from math import *
+from nltk.collocations import *
+from operator import itemgetter
+from nltk.corpus import stopwords
+from nltk.probability import FreqDist
+from nltk.metrics import BigramAssocMeasures
+from nltk.tokenize.regexp import RegexpTokenizer
+from nltk import word_tokenize, wordpunct_tokenize
+from nltk.collocations import BigramCollocationFinder
+
+
+
+reference = open("corpus/volcan_FR_scient.txt").read().strip()
+
+
+for file_ in os.listdir('outCRC'):
+    fich= open('outCRC/'+file_,'r').read().strip().split('\n')
+    out = open('outBrutCRC/'+file_,'w')
+    print file_
+    for line in fich:
+        term = line.strip().split('\t')[0]
+        context = line.strip().split('\t')[1]
+        inf1 = line.strip().split('\t')[2]
+        inf2 = line.strip().split('\t')[3]
+        inf3 = line.strip().split('\t')[4]
+        #inf4 = line.strip().split('\t')[5]
+        #inf5 = line.strip().split('\t')[6]
+	
+
+
+        sentence = re.sub('\?','\?', context)
+	sentence = re.sub('\*','\*', sentence)
+        sentence = re.sub(term,term.lower(),sentence)
+       
+        if re.search(term.upper()+'S',sentence): sentence = re.sub(term.upper()+'S',term.lower()+'s',sentence)
+        elif re.search(term.upper(),sentence): sentence = re.sub(term.upper(),term.lower(),sentence)
+
+        sentence = re.sub('<term>|</term>','',sentence)
+        #sentence = re.sub('','',sentence)
+        patron = re.sub(r'\[','\[', sentence)
+        patron = re.sub(r'\]','\]',patron)
+	patron = re.sub(r'\+','\+',patron)
+	
+        brut = re.findall(re.sub(' ','.{0,5}',patron), reference,re.IGNORECASE)
+        print term, len(set(brut))
+	
+        for sentBrut in list(set(brut)):
+            out.write(term+'	')
+            try:
+                           		
+                out.write(re.sub(re.findall(term+'s?',sentBrut)[0],'<term>'+re.findall(term+'s?',sentBrut)[0].upper()+'</term>',sentBrut)+'	')
+
+            except IndexError:
+                out.write(sentBrut+'	')
+                
+
+            out.write(inf1+'	'+inf2+'	'+inf3+'\n')#	'+inf5+'	\n')
+
+out.close()
+
+	
+	
+	
+
+	

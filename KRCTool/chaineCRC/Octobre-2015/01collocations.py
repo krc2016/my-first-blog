@@ -1,0 +1,61 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+##########################################################
+### Autor name : 		Firas HMIDA		##
+### Date de création :		07-07-2014		##
+### Date de modification : 	23-09-2014		##
+### Contenu : 			CRC-Collocations	##
+##########################################################
+
+import re
+import os
+import sys
+import xlrd
+import time
+import nltk
+import xlwt
+import pickle
+import itertools
+import subprocess
+from math import *
+from nltk.collocations import *
+from operator import itemgetter
+from nltk.corpus import stopwords
+from nltk.probability import FreqDist
+from nltk.metrics import BigramAssocMeasures
+from nltk.tokenize.regexp import RegexpTokenizer
+from nltk import word_tokenize, wordpunct_tokenize
+from nltk.collocations import BigramCollocationFinder
+
+
+
+def main():
+    collocations = pickle.load(open('coll/collocationLemma-allFRNOM.p','rb'))
+    defined_terms = open('CiblesRef.txt','r').read().lower().strip().split('\n')
+
+    stop_words = open('stopW/StopWords.txt').read().strip().split('\n')
+    
+    nbr = 0
+    couples=dict()
+    for term in [ token.split('\t')[2] for token in defined_terms] :
+        collocatif_dict = dict()
+        for collocation,scor in [((a[1],b[1]),score) for ((a,b),score) in collocations] :
+            #if term in collocation[0] or term in collocation[1]:
+            if term in collocation:
+                nbr+=1
+                collocatif = ' '.join([re.sub('[{}()]','',col) for col in collocation if col != term ])
+                collocatif_dict[collocatif] = scor
+                couples[term] = collocatif
+                print term, '--->', couples[term], ' : ',scor
+            if len(collocatif_dict) ==30:
+                break
+        couples[term] = collocatif_dict    
+    #print nbr
+    pickle.dump(couples, open('coll/collocationAllFR-NOM(3).p', 'wb'))
+
+if __name__ == "__main__" :
+    main()
+
+
+
+
